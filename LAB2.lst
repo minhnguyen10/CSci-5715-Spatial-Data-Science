@@ -1,0 +1,437 @@
+SQL> INSERT INTO USER_SDO_GEOM_METADATA (TABLE_NAME, COLUMN_NAME, SRID, DIMINFO)
+  2  VALUES ('COUNTRIES', 'GEOM', 8307,
+  3           SDO_DIM_ARRAY
+  4           (SDO_DIM_ELEMENT('LONGITUDE', -180, 180, 0.5),
+  5            SDO_DIM_ELEMENT('LATITUDE', -90, 90, 0.5)));
+
+1 row created.
+
+SQL> INSERT INTO USER_SDO_GEOM_METADATA (TABLE_NAME, COLUMN_NAME, SRID, DIMINFO) 
+ 2  VALUES ('RIVERS', 'GEOM', 8307, 
+ 3          SDO_DIM_ARRAY                      
+ 4          (SDO_DIM_ELEMENT('LONGITUDE', -180, 180, 0.5), 
+ 5           SDO_DIM_ELEMENT('LATITUDE', -90, 90, 0.5))); 
+
+1 row created.
+
+SQL> INSERT INTO USER_SDO_GEOM_METADATA (TABLE_NAME, COLUMN_NAME, SRID, DIMINFO) 
+ 2  VALUES ('CITIES', 'GEOM', 8307, 
+ 3          SDO_DIM_ARRAY 
+ 4          (SDO_DIM_ELEMENT('LONGITUDE', -180, 180, 0.5), 
+ 5           SDO_DIM_ELEMENT('LATITUDE', -90, 90, 0.5)));
+
+1 row created.
+
+SQL> SELECT SDO_GEOM.SDO_DISTANCE(r.GEOM, c.GEOM, 0.5) as distance
+  2  FROM csci5715.RIVERS r, csci5715.CITIES c
+  3  WHERE r.name = 'Mississippi'
+  4  AND c.name = 'Los Angeles';
+
+  DISTANCE                                                                      
+----------                                                                      
+1340744.42                                                                      
+
+SQL> SELECT SDO_GEOM.SDO_CENTROID(c.geom, m.DIMINFO) as centroid
+  2  FROM csci5715.COUNTRIES c, USER_SDO_GEOM_METADATA m
+  3  WHERE m.table_name = 'COUNTRIES'
+  4  AND m.column_name = 'GEOM'
+  5  AND c.name = 'Belgium';
+
+CENTROID(SDO_GTYPE, SDO_SRID, SDO_POINT(X, Y, Z), SDO_ELEM_INFO, SDO_ORDINATES) 
+--------------------------------------------------------------------------------
+SDO_GEOMETRY(2001, 4326, SDO_POINT_TYPE(4.67149036, 50.6423091, NULL), NULL, NUL
+L)                                                                              
+                                                                                
+
+SQL> SELECT SDO_GEOM.SDO_MBR(c.geom, m.diminfo) as MBR
+  2  FROM csci5715.COUNTRIES c, user_sdo_geom_metadata m
+  3  WHERE m.table_name = 'COUNTRIES'
+  4  AND m.column_name = 'GEOM'
+  5  AND c.name = 'United States';
+
+MBR(SDO_GTYPE, SDO_SRID, SDO_POINT(X, Y, Z), SDO_ELEM_INFO, SDO_ORDINATES)      
+--------------------------------------------------------------------------------
+SDO_GEOMETRY(2003, 4326, NULL, SDO_ELEM_INFO_ARRAY(1, 1003, 3), SDO_ORDINATE_ARR
+AY(172.476349, 18.923882, -66.968887, 71.365814))                               
+                                                                                
+
+SQL> SELECT c.name
+  2  FROM csci5715.COUNTRIES c, user_sdo_geom_metadata m
+  3  WHERE m.table_name = 'COUNTRIES'
+  4  AND m.column_name = 'GEOM'
+  5  ORDER BY SDO_GEOM.SDO_AREA(c.geom,m.diminfo);
+
+NAME                                                                            
+--------------------------------------------------                              
+Holy See (Vatican City)                                                         
+Macau                                                                           
+Gibraltar                                                                       
+Monaco                                                                          
+Tokelau                                                                         
+Cocos (Keeling) Islands                                                         
+Nauru                                                                           
+Bermuda                                                                         
+United States Minor Outlying Islands                                            
+Norfolk Island                                                                  
+Tuvalu                                                                          
+
+NAME                                                                            
+--------------------------------------------------                              
+Pitcairn Islands                                                                
+Saint Barthelemy                                                                
+Saint Martin                                                                    
+Bouvet Island                                                                   
+San Marino                                                                      
+Guernsey                                                                        
+Anguilla                                                                        
+British Indian Ocean Territory                                                  
+Montserrat                                                                      
+Christmas Island                                                                
+Jersey                                                                          
+
+NAME                                                                            
+--------------------------------------------------                              
+Marshall Islands                                                                
+Maldives                                                                        
+British Virgin Islands                                                          
+Wallis and Futuna Islands                                                       
+Liechtenstein                                                                   
+Aruba                                                                           
+American Samoa                                                                  
+Cook Islands                                                                    
+Niue                                                                            
+Saint Pierre and Miquelon                                                       
+Saint Kitts and Nevis                                                           
+
+NAME                                                                            
+--------------------------------------------------                              
+Cayman Islands                                                                  
+United States Virgin Islands                                                    
+Malta                                                                           
+Saint Vincent and the Grenadines                                                
+Saint Helena                                                                    
+Heard Island and McDonald Islands                                               
+Grenada                                                                         
+Turks and Caicos Islands                                                        
+Barbados                                                                        
+Mayotte                                                                         
+Andorra                                                                         
+
+NAME                                                                            
+--------------------------------------------------                              
+Palau                                                                           
+Seychelles                                                                      
+Antigua and Barbuda                                                             
+Singapore                                                                       
+Guam                                                                            
+Northern Mariana Islands                                                        
+Isle of Man                                                                     
+Saint Lucia                                                                     
+Bahrain                                                                         
+Dominica                                                                        
+Micronesia, Federated States of                                                 
+
+NAME                                                                            
+--------------------------------------------------                              
+Tonga                                                                           
+?land Islands                                                                   
+Netherlands Antilles                                                            
+Hong Kong                                                                       
+Sao Tome and Principe                                                           
+Kiribati                                                                        
+Martinique                                                                      
+Faroe Islands                                                                   
+Guadeloupe                                                                      
+Comoros                                                                         
+Mauritius                                                                       
+
+NAME                                                                            
+--------------------------------------------------                              
+Luxembourg                                                                      
+Reunion                                                                         
+Samoa                                                                           
+French Polynesia                                                                
+Cape Verde                                                                      
+South Georgia South Sandwich Islands                                            
+Trinidad and Tobago                                                             
+Brunei Darussalam                                                               
+Palestine                                                                       
+French Southern and Antarctic Lands                                             
+Puerto Rico                                                                     
+
+NAME                                                                            
+--------------------------------------------------                              
+Cyprus                                                                          
+Lebanon                                                                         
+Gambia                                                                          
+Jamaica                                                                         
+Qatar                                                                           
+Falkland Islands (Malvinas)                                                     
+Vanuatu                                                                         
+Bahamas                                                                         
+Montenegro                                                                      
+Timor-Leste                                                                     
+Kuwait                                                                          
+
+NAME                                                                            
+--------------------------------------------------                              
+Swaziland                                                                       
+New Caledonia                                                                   
+Fiji                                                                            
+Slovenia                                                                        
+El Salvador                                                                     
+Israel                                                                          
+Djibouti                                                                        
+Belize                                                                          
+Rwanda                                                                          
+The former Yugoslav Republic of Macedonia                                       
+Equatorial Guinea                                                               
+
+NAME                                                                            
+--------------------------------------------------                              
+Burundi                                                                         
+Haiti                                                                           
+Solomon Islands                                                                 
+Albania                                                                         
+Armenia                                                                         
+Lesotho                                                                         
+Belgium                                                                         
+Republic of Moldova                                                             
+Guinea-Bissau                                                                   
+Netherlands                                                                     
+Taiwan                                                                          
+
+NAME                                                                            
+--------------------------------------------------                              
+Bhutan                                                                          
+Switzerland                                                                     
+Denmark                                                                         
+Estonia                                                                         
+Dominican Republic                                                              
+Slovakia                                                                        
+Costa Rica                                                                      
+Bosnia and Herzegovina                                                          
+Croatia                                                                         
+Togo                                                                            
+Svalbard                                                                        
+
+NAME                                                                            
+--------------------------------------------------                              
+Latvia                                                                          
+Lithuania                                                                       
+Sri Lanka                                                                       
+Ireland                                                                         
+Georgia                                                                         
+United Arab Emirates                                                            
+Sierra Leone                                                                    
+Panama                                                                          
+Czech Republic                                                                  
+French Guiana                                                                   
+Austria                                                                         
+
+NAME                                                                            
+--------------------------------------------------                              
+Azerbaijan                                                                      
+Serbia                                                                          
+Jordan                                                                          
+Portugal                                                                        
+Hungary                                                                         
+Liberia                                                                         
+Korea, Republic of                                                              
+Iceland                                                                         
+Guatemala                                                                       
+Cuba                                                                            
+Bulgaria                                                                        
+
+NAME                                                                            
+--------------------------------------------------                              
+Honduras                                                                        
+Benin                                                                           
+Malawi                                                                          
+Eritrea                                                                         
+Korea, Democratic People's Republic of                                          
+Nicaragua                                                                       
+Greece                                                                          
+Bangladesh                                                                      
+Tajikistan                                                                      
+Suriname                                                                        
+Nepal                                                                           
+
+NAME                                                                            
+--------------------------------------------------                              
+Tunisia                                                                         
+Uruguay                                                                         
+Cambodia                                                                        
+Syrian Arab Republic                                                            
+Senegal                                                                         
+Kyrgyzstan                                                                      
+Belarus                                                                         
+Guyana                                                                          
+Lao People's Democratic Republic                                                
+Romania                                                                         
+Ghana                                                                           
+
+NAME                                                                            
+--------------------------------------------------                              
+Uganda                                                                          
+United Kingdom                                                                  
+Guinea                                                                          
+Ecuador                                                                         
+Gabon                                                                           
+Western Sahara                                                                  
+New Zealand                                                                     
+Burkina Faso                                                                    
+Philippines                                                                     
+Italy                                                                           
+Oman                                                                            
+
+NAME                                                                            
+--------------------------------------------------                              
+Poland                                                                          
+Cote d'Ivoire                                                                   
+Norway                                                                          
+Viet Nam                                                                        
+Malaysia                                                                        
+Finland                                                                         
+Congo                                                                           
+Germany                                                                         
+Japan                                                                           
+Zimbabwe                                                                        
+Paraguay                                                                        
+
+NAME                                                                            
+--------------------------------------------------                              
+Morocco                                                                         
+Yemen                                                                           
+Iraq                                                                            
+Sweden                                                                          
+Uzbekistan                                                                      
+Papua New Guinea                                                                
+Cameroon                                                                        
+Turkmenistan                                                                    
+Spain                                                                           
+Thailand                                                                        
+France                                                                          
+
+NAME                                                                            
+--------------------------------------------------                              
+Botswana                                                                        
+Kenya                                                                           
+Madagascar                                                                      
+Ukraine                                                                         
+Central African Republic                                                        
+Somalia                                                                         
+Afghanistan                                                                     
+Burma                                                                           
+Chile                                                                           
+Zambia                                                                          
+Turkey                                                                          
+
+NAME                                                                            
+--------------------------------------------------                              
+Mozambique                                                                      
+Namibia                                                                         
+Pakistan                                                                        
+Nigeria                                                                         
+Venezuela                                                                       
+United Republic of Tanzania                                                     
+Egypt                                                                           
+Mauritania                                                                      
+Bolivia                                                                         
+Ethiopia                                                                        
+Colombia                                                                        
+
+NAME                                                                            
+--------------------------------------------------                              
+Niger                                                                           
+South Africa                                                                    
+Angola                                                                          
+Mali                                                                            
+Chad                                                                            
+Peru                                                                            
+Mongolia                                                                        
+Libyan Arab Jamahiriya                                                          
+Iran (Islamic Republic of)                                                      
+Indonesia                                                                       
+Saudi Arabia                                                                    
+
+NAME                                                                            
+--------------------------------------------------                              
+Mexico                                                                          
+Greenland                                                                       
+Algeria                                                                         
+Democratic Republic of the Congo                                                
+Sudan                                                                           
+Kazakhstan                                                                      
+Argentina                                                                       
+India                                                                           
+Australia                                                                       
+Brazil                                                                          
+China                                                                           
+
+NAME                                                                            
+--------------------------------------------------                              
+United States                                                                   
+Canada                                                                          
+Antarctica                                                                      
+Russia                                                                          
+
+246 rows selected.
+
+SQL> SELECT ci.name as city, c.name as country
+  2  FROM csci5715.COUNTRIES c, csci5715.CITIES ci, csci5715.RIVERS r
+  3  WHERE r.name = 'Mississippi'
+  4  AND SDO_GEOM.SDO_DISTANCE(r.geom, ci.geom, 0.5) < 100000
+  5  AND SDO_CONTAINS(c.geom, ci.geom) = 'TRUE';
+
+no rows selected
+
+SQL> SELECT SDO_GEOM.SDO_DISTANCE(r.GEOM, mr.diminfo, ci.GEOM, mc.diminfo) as distance
+  2  FROM csci5715.CITIES ci, csci5715.RIVERS r, user_sdo_geom_metadata mr, user_sdo_geom_metadata mc
+  3  WHERE mr.table_name = 'RIVERS'
+  4  AND mr.column_name = 'GEOM'
+  5  AND mc.table_name = 'COUNTRIES'
+  6  AND mc.column_name = 'GEOM'
+  7  AND r.name = 'Mekong'
+  8  AND ci.name = 'Hanoi';
+
+  DISTANCE                                                                      
+----------                                                                      
+368478.532                                                                      
+
+SQL> SELECT SDO_GEOM.SDO_DISTANCE(r.GEOM, SDO_GEOM.SDO_CENTROID(c.geom, m.DIMINFO), 0.5) as distance
+  2  FROM csci5715.RIVERS r, csci5715.COUNTRIES c, user_sdo_geom_metadata m
+  3  WHERE m.table_name = 'COUNTRIES'
+  4  AND m.column_name = 'GEOM'
+  5  AND c.name = 'United States'
+  6  AND r.name = 'Mississippi';
+
+  DISTANCE                                                                      
+----------                                                                      
+273555.017                                                                      
+
+SQL> SELECT r.name
+  2  FROM csci5715.RIVERS r, user_sdo_geom_metadata m
+  3  WHERE m.table_name = 'RIVERS'
+  4  AND m.column_name = 'GEOM'
+  5  ORDER By SDO_GEOM.SDO_LENGTH(r.geom, m.diminfo) DESC
+  6  OFFSET 1 ROWS
+  7  FETCH FIRST 1 ROWS ONLY;
+
+NAME                                                                            
+--------------------------------------------------------------------------------
+Amazonas                                                                        
+
+SQL> SELECT c.name
+  2  FROM csci5715.COUNTRIES c, USER_SDO_GEOM_METADATA m
+  3  WHERE m.table_name = 'COUNTRIES'
+  4  AND m.column_name = 'GEOM'
+  5  AND c.pop2005 <> 0
+  6  ORDER BY SDO_GEOM.SDO_AREA(c.geom, m.diminfo) / c.pop2005 DESC
+  7  FETCH FIRST 1 ROWS ONLY;
+
+NAME                                                                            
+--------------------------------------------------                              
+Greenland                                                                       
+
+SQL> spool off
