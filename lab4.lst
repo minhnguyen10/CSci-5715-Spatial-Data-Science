@@ -1,0 +1,153 @@
+SQL> SELECT sdo_net.get_no_of_nodes('hennepin') FROM DUAL;
+
+SDO_NET.GET_NO_OF_NODES('HENNEPIN')                                             
+-----------------------------------                                             
+                                839                                             
+
+SQL> select sdo_net.get_node_degree('hennepin', 140776) from dual;
+
+SDO_NET.GET_NODE_DEGREE('HENNEPIN',140776)                                      
+------------------------------------------                                      
+                                         4                                      
+
+SQL> SELECT node_id
+  2  FROM hennepin_node$
+  3  WHERE sdo_net.get_node_out_degree('hennepin',node_id) <= 1;
+
+   NODE_ID                                                                      
+----------                                                                      
+     11358                                                                      
+     25335                                                                      
+    100773                                                                      
+    134381                                                                      
+      5721                                                                      
+    103376                                                                      
+    142527                                                                      
+    142546                                                                      
+    139276                                                                      
+     45312                                                                      
+    100821                                                                      
+
+   NODE_ID                                                                      
+----------                                                                      
+    127387                                                                      
+     46652                                                                      
+    123246                                                                      
+     41320                                                                      
+     96866                                                                      
+     18139                                                                      
+     94826                                                                      
+    160616                                                                      
+     45248                                                                      
+     39187                                                                      
+     43058                                                                      
+
+   NODE_ID                                                                      
+----------                                                                      
+    104309                                                                      
+     47510                                                                      
+     43020                                                                      
+    132210                                                                      
+    103402                                                                      
+    142597                                                                      
+    143053                                                                      
+    143095                                                                      
+
+30 rows selected.
+
+SQL> SELECT avg(sdo_net.get_node_in_degree('hennepin', node_id))
+  2  FROM hennepin_node$;
+
+AVG(SDO_NET.GET_NODE_IN_DEGREE('HENNEPIN',NODE_ID))                             
+---------------------------------------------------                             
+                                         2.05244338                             
+
+SQL> SELECT transit_time
+  2  FROM C5715F22U50.hennepin_transit_time
+  3  WHERE transit_id in (
+  4  SELECT transit_id
+  5  FROM hennepin_link$
+  6  WHERE link_id = 300)
+  7  AND start_time >= 630
+  8  AND end_time <= 1020;
+
+TRANSIT_TIME                                                                    
+------------                                                                    
+  .356355976                                                                    
+  .356355976                                                                    
+  .356355976                                                                    
+  .370061976                                                                    
+  .370061976                                                                    
+  .370061976                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+
+TRANSIT_TIME                                                                    
+------------                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+  .384864455                                                                    
+  .370061976                                                                    
+  .370061976                                                                    
+  .370061976                                                                    
+  .370061976                                                                    
+  .356355976                                                                    
+
+TRANSIT_TIME                                                                    
+------------                                                                    
+  .356355976                                                                    
+  .356355976                                                                    
+  .356355976                                                                    
+  .356355976                                                                    
+
+26 rows selected.
+
+SQL> SELECT transit_time
+  2  FROM C5715F22U50.hennepin_transit_time
+  3  WHERE transit_id in (
+  4  SELECT transit_id
+  5  FROM hennepin_link$
+  6  WHERE link_id = 300 )
+  7  AND start_time >= 1230
+  8  AND end_time <= 1440;
+
+TRANSIT_TIME                                                                    
+------------                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+
+TRANSIT_TIME                                                                    
+------------                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+  .320720379                                                                    
+
+14 rows selected.
+
+SQL> SELECT max(transit_time), min(transit_time)
+  2  FROM C5715F22U50.hennepin_transit_time
+  3  WHERE transit_id in (
+  4  SELECT transit_id
+  5  FROM hennepin_link$
+  6  WHERE link_id = 1000);
+
+MAX(TRANSIT_TIME) MIN(TRANSIT_TIME)                                             
+----------------- -----------------                                             
+       .156177492         .10151537                                             
+
+SQL> spool off
